@@ -14,7 +14,7 @@ from geometry import Shape
 
 class Window(QWidget):
 
-    keys = {Qt.Key_Left: "left", Qt.Key_Right: "right", Qt.Key_Space: "space"}
+    keys = {Qt.Key_Left: "left", Qt.Key_Right: "right", Qt.Key_Down: "equal", Qt.Key_Space: "skip"}
 
     def __init__(self):
         super().__init__()
@@ -77,7 +77,7 @@ class Window(QWidget):
     ################################################################################
     def draw_exercise(self, task_description: str, task_count: int):
         window_size = self.get_size()
-        text = f"Exercise {task_count}\nWelche Seite ist {task_description} (oder gleich) ?"
+        text = f"Exercise {task_count}\nWelche Seite ist {task_description}?"
 
         painter = QPainter()
         painter.begin(self)
@@ -129,10 +129,10 @@ class Window(QWidget):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("--debug", action="store_true", help="log debugging mode")
+    parser.add_argument("--verbose", action="store_true", help="verbose mode")
     args = parser.parse_args()
 
-    log_level = logging.INFO if not args.debug else logging.DEBUG
+    log_level = logging.INFO if not args.verbose else logging.DEBUG
     logging.basicConfig(level=log_level, format="%(message)s")
 
     app = QApplication(sys.argv)

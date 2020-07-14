@@ -3,7 +3,7 @@ Eligo game for testing and exercising reaction time
 
 ![Drag Racing](ressources/screenshot.png)
 
-Keys: [Left] for left block, [Right] for right block, [Space] for next exercise
+Keys: [Left] for left block, [Right] for right block, [Down] for equal, [Space] for next exercise
 
 
 ## Installation
@@ -18,5 +18,5 @@ pip3 install -r requirements.txt
 ## Execution
 ```
 source .venv/bin/activate  # activate virtual environment
-python3 main.py
+python3 main.py  # --debug for further information
 ```

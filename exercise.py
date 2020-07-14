@@ -50,8 +50,12 @@ class Exercise:
 
         # Solve task (assuming addition).
         results = [self.operators[operation](shapes_side).data for shapes_side in shapes_task]
-        solution_is_left = ((results[0] >= results[1]) == (decision == "grösser"))  # True => left
-        self._solution = "left" if solution_is_left else "right"
+        if results[0] == results[1]:
+            self._solution = "equal"
+        elif (results[0] > results[1]) == (decision == "grösser"):
+            self._solution = "left"
+        else:
+            self._solution = "right"
 
         # Increment task counter.
         self._counter += 1
