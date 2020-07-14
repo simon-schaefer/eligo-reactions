@@ -1,7 +1,7 @@
 # eligo reactions game
 Eligo game for testing and exercising reaction time
 
-![alt text](https://github.com/simon-schaefer/eligo_reactions.git/ressources/screenshot.png "screnshot")
+![Drag Racing](ressources/screenshot.png)
 
 Keys: [Left] for left block, [Right] for right block, [Space] for next exercise
 
