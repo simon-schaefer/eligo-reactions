@@ -52,6 +52,9 @@ class Window(QWidget):
         self.draw_task(shapes_task, operation)
 
     def keyPressEvent(self, a0: QKeyEvent) -> None:
+        if a0.key() not in [Qt.Key_Left, Qt.Key_Right, Qt.Key_Space]:
+            return
+
         time_needed = self.exercise.time_needed()
         key_pressed = "left" if a0.key() == Qt.Key_Left else "right"
         is_correct = (key_pressed == self.exercise.solution)
