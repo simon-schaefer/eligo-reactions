@@ -17,5 +17,6 @@ pip3 install -r requirements.txt
 
 ## Execution
 ```
+source .venv/bin/activate  # activate virtual environment
 python3 main.py
 ```
