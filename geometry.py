@@ -146,7 +146,7 @@ class Shape:
         return Shape(data=self.data / other.data)
 
     def __str__(self) -> str:
-        return f"{self.form}({self.data}, {self.color})"
+        return f"{self.form}({self.data})"
 
     def __repr__(self):
         return self.__str__()

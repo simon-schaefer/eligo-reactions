@@ -20,6 +20,8 @@ class Exercise:
         self._solution = None
         self._timer = None
 
+        self._counter = -1
+
     def new_task(self):
         shapes_dict = []
         kinds = []
@@ -42,14 +44,17 @@ class Exercise:
                 shapes_side.append(shape_random)
             shapes_task.append(shapes_side)
 
-        decision = random.choice(["greater", "smaller"])
+        decision = random.choice(["grösser", "kleiner"])
         operation = random.choice(list(self.operators.keys()))
         self._task = shapes_dict, shapes_task, decision, operation
 
         # Solve task (assuming addition).
         results = [self.operators[operation](shapes_side).data for shapes_side in shapes_task]
-        solution_is_left = ((results[0] >= results[1]) == (decision == "greater"))  # True => left
+        solution_is_left = ((results[0] >= results[1]) == (decision == "grösser"))  # True => left
         self._solution = "left" if solution_is_left else "right"
+
+        # Increment task counter.
+        self._counter += 1
 
         # Start task timer.
         self._timer_start()
@@ -79,8 +84,9 @@ class Exercise:
             return "None"
         else:
             shapes_dict, shapes_task, dec, op = self.task
-            return f"Exercise\nlegend => {shapes_dict}, \ntask => {shapes_task}, \ndescription => {dec}, {op}\n" \
-                   f"solution => {self.solution}"
+            return f"Exercise {self.counter}\n" \
+                   f"legend => {shapes_dict}, \ntask => {shapes_task}, \ndescription => {dec}, {op}\n" \
+                   f"solution => {self.solution}\n\n"
 
     ################################################################################
     # Exercise Properties ##########################################################
@@ -92,6 +98,10 @@ class Exercise:
     @property
     def task(self) -> typing.Tuple[typing.List[Shape], typing.List[typing.List[Shape]], str, str]:
         return self._task
+
+    @property
+    def counter(self) -> int:
+        return self._counter
 
     @property
     def solution(self) -> str:

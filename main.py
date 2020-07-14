@@ -14,6 +14,8 @@ from geometry import Shape
 
 class Window(QWidget):
 
+    keys = {Qt.Key_Left: "left", Qt.Key_Right: "right", Qt.Key_Space: "space"}
+
     def __init__(self):
         super().__init__()
 
@@ -31,7 +33,7 @@ class Window(QWidget):
 
         # Initialize statistic and exercise result variable.
         self.exercise = Exercise(num_shapes=2)
-        self.statistics = pd.DataFrame(columns=["time", "correct"])
+        self.statistics = pd.DataFrame(columns=["time", "is_correct", "pressed", "solution"])
 
         # Set window properties.
         self.setWindowTitle('eligo_reactions')
@@ -48,17 +50,18 @@ class Window(QWidget):
 
         shapes_dict, shapes_task, task_description, operation = self.exercise.task
         self.draw_legend(shapes_dict)
-        self.draw_exercise(task_description)
-        self.draw_task(shapes_task, operation)
+        self.draw_exercise(task_description, task_count=self.exercise.counter)
+        self.draw_task(shapes_task, operation=operation)
 
     def keyPressEvent(self, a0: QKeyEvent) -> None:
-        if a0.key() not in [Qt.Key_Left, Qt.Key_Right, Qt.Key_Space]:
+        if a0.key() not in self.keys.keys():
             return
 
         time_needed = self.exercise.time_needed()
-        key_pressed = "left" if a0.key() == Qt.Key_Left else "right"
+        key_pressed = self.keys[a0.key()]
         is_correct = (key_pressed == self.exercise.solution)
-        statistic = {"time": time_needed, "correct": is_correct}
+        statistic = {"time": time_needed, "is_correct": is_correct,
+                     "pressed": key_pressed, "solution": self.exercise.solution}
         self.statistics = self.statistics.append(statistic, ignore_index=True)
 
         self.exercise.reset_task()
@@ -66,20 +69,20 @@ class Window(QWidget):
 
     def closeEvent(self, a0: QCloseEvent) -> None:
         logging.info("--- Statistics ---")
-        logging.debug(self.statistics)
+        logging.info(self.statistics)
         logging.info(self.statistics.mean())
 
     ################################################################################
     # Drawing ######################################################################
     ################################################################################
-    def draw_exercise(self, task_description: str):
+    def draw_exercise(self, task_description: str, task_count: int):
         window_size = self.get_size()
-        text = f"Which side is {task_description} (or equal) ?"
+        text = f"Exercise {task_count}\nWelche Seite ist {task_description} (oder gleich) ?"
 
         painter = QPainter()
         painter.begin(self)
         painter.setFont(QFont('Times', 35))
-        painter.drawText(QRect(0, 0, window_size[0], window_size[1] / 8), Qt.AlignCenter | Qt.AlignCenter, text)
+        painter.drawText(QRect(0, 0, window_size[0], window_size[1] / 6), Qt.AlignCenter | Qt.AlignCenter, text)
         painter.end()
 
     def draw_task(self, task: typing.List[typing.List[Shape]], operation: str, size: int = 30):
@@ -111,7 +114,7 @@ class Window(QWidget):
             painter = shape.draw(window=self, position=(x, y), size=size)
 
             painter.begin(self)
-            painter.drawText(QRect(x + size, y, size, size), Qt.AlignLeft | Qt.AlignCenter, f" = {shape.data}")
+            painter.drawText(QRect(x, y + size, size, size), Qt.AlignLeft | Qt.AlignCenter, f"{shape.data}")
             painter.end()
 
     ################################################################################
